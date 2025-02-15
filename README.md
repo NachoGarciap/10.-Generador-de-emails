@@ -1,2 +1,2 @@
-# 10.--Generador-de-emails
+# 10.-Generador-de-emails
 Generador de emails
