@@ -7,6 +7,7 @@ class GeneradorEmail:
         print('----- Generador de emails -----')
         self.correo = ''
         self.secciones = ['ventas', 'marketing', 'contabilidad', 'soporte']
+        self.num_correo=0
 
     def menu(self):
 
@@ -39,7 +40,8 @@ class GeneradorEmail:
 
         if correo_generado:  # Verificamos que el correo se haya generado
             with open('correos.txt', 'a', encoding='utf8') as archivo:
-                archivo.write(correo_generado + '\n')  # Usamos la variable correo_generado
+                self.num_correo += 1
+                archivo.write(f'{self.num_correo}.' + correo_generado + '\n')  # Usamos la variable correo_generado
             print('Correo guardado correctamente.')
             sys.exit('Cerrando')  # Termina el programa después de guardar
         else:
