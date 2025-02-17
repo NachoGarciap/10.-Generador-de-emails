@@ -1,5 +1,3 @@
-import sys
-
 
 class GeneradorEmail:
 
@@ -7,22 +5,44 @@ class GeneradorEmail:
         print('----- Generador de emails -----')
         self.correo = ''
         self.secciones = ['ventas', 'marketing', 'contabilidad', 'soporte']
-        self.num_correo=0
+
+        #para que el id aumente en el archivo .txt
+        try:
+            with open('correos.txt', 'r', encoding='utf8') as archivo:
+                lineas = archivo.readlines()
+                self.id_correo = len(lineas)
+        except FileNotFoundError:
+            self.id_correo = 0
 
     def menu(self):
 
         while True:
             print('----- Generador de emails -----')
-            print('1. Introduce tu nombre y apellidos')
-            print('2. Introduce la seccion a la que perteneces')
-            print('3. Salir')
+            print('1. Crear email de empresa')
+            print('2. Salir')
+
+            try:
+                opcion = int(input('Elige una opción: '))
+            except ValueError:
+                print('Elige una opcion correcta')
+                continue
+
+            if opcion == 1:
+                self.crear_correo()
+                self.guardar_correos()
+            elif opcion==2:
+                print('Saliendo del programa...')
+                break
+            else:
+                print('Opcion no valida')
 
     def crear_correo(self):
         print('Por favor, introduce los siguientes datos: ')
         nombre = input('Nombre: ')
         apellido = input('Apellido: ')
+        seccion = self.elegir_puesto()
 
-        self.correo = f'{nombre}.{apellido}.{self.elegir_puesto()}@empresa.com'
+        self.correo = f'{nombre}.{apellido}.{seccion}@empresa.com'
 
         return self.correo
 
@@ -31,22 +51,21 @@ class GeneradorEmail:
         while True:
             seccion = input(f'Elige una seccion {self.secciones}: ')
             if seccion not in self.secciones:
-                print('Seccion no valida, elige una correcta, por favor.')
+                print('Sección no valida, elige una correcta, por favor.')
             else:
                 return seccion
 
     def guardar_correos(self):
-        correo_generado = self.crear_correo()  # Guardamos el correo generado en una variable
 
-        if correo_generado:  # Verificamos que el correo se haya generado
+        if self.correo:  # Verificamos que el correo ya se haya generado
             with open('correos.txt', 'a', encoding='utf8') as archivo:
-                self.num_correo += 1
-                archivo.write(f'{self.num_correo}.' + correo_generado + '\n')  # Usamos la variable correo_generado
+                self.id_correo += 1
+                archivo.write(f'{self.id_correo}. {self.correo}\n')
             print('Correo guardado correctamente.')
-            sys.exit('Cerrando')  # Termina el programa después de guardar
         else:
             print('No hay correo para guardar. Genera uno primero.')
 
 
+
 prueba = GeneradorEmail()
-prueba.guardar_correos()
+prueba.menu()
